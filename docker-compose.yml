@@ -1,0 +1,28 @@
+version: '3.3'
+
+services:
+  database:
+    image: mysql:5.7
+    container_name: database
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: slackerz
+      MYSQL_DATABASE: WebServerB
+    volumes:
+      - ./mysql-data:/var/lib/mysql/data
+    ports:
+      - '3306:3306'
+
+#services:
+        # The existing database container configuration...
+  php-apache:
+    container_name: php-apache
+    build:
+      context: ./php
+    ports:
+        - '8080:80'
+    volumes:
+      - ./src:/var/www/WebServerB
+      - ./apache/default.conf:/etc/apache2/sites-enabled/000-default.conf
+    depends_on:
+      - database
